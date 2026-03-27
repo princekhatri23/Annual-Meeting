@@ -1,0 +1,12 @@
+# Exclude large files
+10 Years drone.mp4
+*.pptx
+*.xlsx
+
+# Exclude system files
+.DS_Store
+Thumbs.db
+
+# Exclude temporary files
+serve.ps1
+serve2.ps1
