@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Looking Back, Moving Forward — Annual Meeting 2025–26</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Nunito:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #1E3A2F; --white: #F2EDE4; --cream: #E5DDD0;
+    --yellow: #C8971A; --warm: #C45C3A; --muted: #7A6E5F;
+    --red: #C45C3A; --forest: #1E3A2F; --gold: #C8971A;
+    --terracotta: #C45C3A; --page-bg: #F2EDE4; --text-dark: #1A1A10;
+  }
+
+  /* Font definitions: body uses Avenir / Nunito fallback. Headings use Korolev / Anton fallback. */
+  html { font-size: 18px; } /* Increased base font size */
+  body {
+    background: var(--page-bg);
+    color: var(--text-dark);
+    font-family: 'Avenir', 'Avenir Next', 'Nunito', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    cursor: none;
+  }
+  
+  h1, h2, h3, h4, h5, .hero-title, .statement-big, .proj-title, .proj-big, .big-num, .agenda-num, .close-big, .pivot-big, .deliver-item .val {
+    font-family: 'Korolev', 'Anton', 'Oswald', 'Bebas Neue', sans-serif !important;
+  }
+
+  /* Custom cursor */
+  #cursor {
+    position: fixed; width: 18px; height: 18px; background: var(--terracotta); border-radius: 50%;
+    border: 2px solid var(--white);
+    pointer-events: none; z-index: 11000; transform: translate(-50%, -50%);
+    transition: transform 0.15s, width 0.2s, height 0.2s, background-color 0.2s;
+  }
+  #cursor.big { width: 70px; height: 70px; background: rgba(196, 92, 58, 0.5); border-color: var(--terracotta); border-width: 1px; }
+
+  /* Scroll hint */
+  #scroll-hint {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    z-index: 100; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 1; transition: opacity 0.5s;
+  }
+  #scroll-hint.hidden { opacity: 0; pointer-events: none; }
+  .scroll-text { font-size: 12px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; font-family:'Avenir',sans-serif; }
+  .scroll-arrow { width: 40px; height: 1px; background: var(--forest); position: relative; animation: arrowPulse 1.5s infinite; }
+  .scroll-arrow::after { content:''; position:absolute; right:0; top:-3px; width:6px; height:6px; border-right:1px solid var(--forest); border-top:1px solid var(--forest); transform:rotate(45deg); }
+  @keyframes arrowPulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+  #progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--yellow); z-index: 200; width: 0%; transition: width 0.1s; }
+
+  #nav-dots { position: fixed; right: 2rem; top: 50%; transform: translateY(-50%); z-index: 100; display: flex; flex-direction: column; gap: 10px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--muted); cursor: pointer; transition: all 0.3s; }
+  .dot.active { background: var(--forest); border-color: var(--forest); transform: scale(1.4); }
+
+  #section-counter { position: fixed; bottom: 2rem; right: 2rem; z-index: 100; font-size: 20px; color: var(--muted); letter-spacing: 0.15em; font-family: 'Avenir', 'Nunito', monospace; font-weight: bold; }
+
+  #track { display: flex; height: 100vh; will-change: transform; transition: transform 0.8s cubic-bezier(0.77,0,0.175,1); width: max-content; }
+
+  .panel {
+    width: 100vw;
+    height: 100vh;
+    flex: 0 0 100vw;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ========== PANEL 1 — HERO ========== */
+  .p-hero {
+    background: var(--page-bg);
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 10vw;
+  }
+  .hero-year {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 11vw, 13rem);
+    line-height: 0.9;
+    color: var(--forest);
+    opacity: 0;
+    animation: fadeUp 1s 0.5s forwards;
+  }
+  .hero-title span { color: var(--terracotta); display: block; }
+  .hero-sub {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 2vw, 1.6rem);
+    color: var(--muted);
+    margin-top: 2rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.8s forwards;
+  }
+  .hero-line {
+    position: absolute;
+    right: 8vw; bottom: 10vh;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+    opacity: 0;
+    animation: fadeUp 1s 1.2s forwards;
+  }
+  .big-num {
+    position: absolute;
+    right: 6vw;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30vw;
+    color: rgba(30,58,47,0.06);
+    pointer-events: none;
+    line-height: 1;
+    user-select: none;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========== PANEL 1 — HERO VIDEO ========== */
+  .video-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1E3A2F 0%, #2A5844 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: var(--gold);
+    flex-direction: column;
+    cursor: pointer;
+  }
+  .video-placeholder p {
+    color: var(--white);
+    font-size: 1.2rem;
+    margin-top: 1rem;
+  }
+
+  /* ========== PANEL 2 — AGENDA ========== */
+  .p-agenda {
+    background: var(--page-bg);
+    color: var(--text-dark);
+    padding: 0 10vw;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4rem;
+  }
+  .agenda-items { display: flex; gap: 4vw; align-items: flex-start; }
+  .agenda-num {
+    font-size: clamp(6rem, 8vw, 10rem);
+    line-height: 1;
+    -webkit-text-stroke: 2px var(--forest);
+    color: transparent;
+  }
+  .agenda-card { max-width: 400px; }
+  .agenda-card h3 {
+    font-size: clamp(2rem, 3.5vw, 4rem);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+  }
+  .agenda-card p { font-size: 1.3rem; line-height: 1.7; color: var(--muted); }
+  .divider-v { width: 1px; height: 180px; background: var(--cream); align-self: center; }
+
+  /* ========== PANEL 3 — QUESTION ========== */
+  .p-question {
+    background: var(--gold);
+    color: var(--text-dark);
+    flex-direction: column;
+    text-align: center;
+    padding: 0 8vw;
+  }
+  .q-label { font-size: 1rem; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 2rem; opacity: 0.6; }
+  .q-text {
+    font-size: clamp(2.5rem, 5vw, 6rem);
+    line-height: 1.15;
+    max-width: 1000px;
+    color: var(--text-dark);
+  }
+
+  /* ========== PANEL 4 — YEAR STATEMENT ========== */
+  .p-statement {
+    background: var(--page-bg); /* Changed bg based on image reference */
+    flex-direction: column;
+    text-align: center;
+    padding: 0 6vw;
+  }
+  .statement-pre { font-family: 'Korolev', 'Anton', sans-serif; font-size: 2rem; letter-spacing: 0.1em; color: var(--text-dark); margin-bottom: 1rem; margin-top: -3rem; }
+  .statement-big {
+    font-family: 'Korolev', 'Anton', sans-serif;
+    font-size: clamp(6rem, 15vw, 18rem);
+    line-height: 0.9;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+  }
+  
+  /* ========== PANEL 5 — WHAT WE DELIVERED ========== */
+  .p-delivered {
+    background: var(--page-bg);
+    color: var(--text-dark);
+    padding: 0 8vw;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .deliver-grid { display: flex; gap: 3vw; margin-top: 2rem; }
+  .deliver-item {
+    background: var(--forest);
+    color: var(--white);
+    padding: 2rem 1.5rem;
+    min-width: 240px;
+    position: relative;
+    overflow: hidden;
+  }
+  .deliver-item::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -10px; right: 10px;
+    font-size: 8rem;
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+  }
+  .deliver-item h4 { font-size: 0.9rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(242,237,228,0.7); margin-bottom: 0.8rem; }
+  .deliver-item .val { font-size: 3.5rem; line-height: 1; color: var(--gold); }
+  .deliver-item p { font-size: 1rem; color: rgba(242,237,228,0.7); margin-top: 0.8rem; }
+
+  /* ========== PANEL 6 — PROJECTS ========== */
+  .p-projects {
+    background: var(--cream);
+    color: var(--text-dark);
+    padding: 0 8vw;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .proj-header { display: flex; justify-content: space-between; width: 100%; align-items: flex-end; margin-bottom: 4rem; }
+  .proj-title { font-size: clamp(4rem, 8vw, 9rem); line-height: 1; color: var(--text-dark); }
+  .proj-big { font-size: clamp(6rem, 15vw, 18rem); color: var(--gold); line-height: 0.9; }
+  .proj-sub { font-size: 1.2rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .proj-bars { display: flex; gap: 3vw; width: 100%; }
+  .proj-bar-wrap { flex: 1; }
+  .proj-bar-label { font-size: 1.1rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+  .proj-bar-track { height: 6px; background: rgba(30,58,47,0.12); width: 100%; }
+  .proj-bar-fill { height: 6px; background: var(--forest); width: 0%; transition: width 1.5s cubic-bezier(0.25,1,0.5,1) 0.3s; }
+  .proj-bar-num { font-size: 3.5rem; margin-top: 1rem; color: var(--text-dark); }
+  .proj-tags { display: flex; gap: 1rem; margin-top: 3rem; flex-wrap: wrap; }
+  .proj-tag {
+    font-size: 1rem; letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 8px 18px;
+    border: 1px solid rgba(30,58,47,0.25);
+    color: var(--muted);
+  }
+  .proj-tag.hi { border-color: var(--forest); color: var(--forest); }
+
+  /* ========== PANEL 7 — PROJECT TYPES ========== */
+  .p-project-types {
+    background: var(--page-bg);
+    color: var(--text-dark);
+    padding: 0 10vw;
+    flex-direction: column;
+    align-items: center; /* Centered visually inline with the reference image */
+  }
+  .type-list { width: 100%; max-width: 1200px; }
+  .type-row {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 0; /* Reduced to fit 9 items effortlessly */
+    border-bottom: 1px solid rgba(30,58,47,0.1);
+    gap: 2rem;
+    transition: background 0.2s, color 0.2s, padding-left 0.2s;
+    margin: 0;
+  }
+  .type-row:hover { background: rgba(30,58,47,0.03); color: var(--terracotta); }
+  .type-num { font-size: 14px; color: var(--muted); width: 30px; font-weight: bold; }
+  .type-name { flex: 1; font-size: 1.5rem; font-weight: 500; font-family: 'Avenir', 'Avenir Next', sans-serif; }
+
+  /* Interactive Elements */
+  .clickable-row, .clickable-box { transition: transform 0.2s, opacity 0.2s, padding-left 0.2s; cursor: none !important; }
+  .clickable-row:hover { padding-left: 1.5rem; }
+  .clickable-box:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); opacity: 1; }
+  
+  /* Modal Global */
+  #img-modal {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(30,58,47,0.95); z-index: 10000;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  #img-modal.active { opacity: 1; pointer-events: all; }
+  #img-modal.white-bg { background: rgba(255,255,255,0.98); }
+  #img-modal.white-bg .modal-close, #img-modal.white-bg .modal-nav { color: var(--forest); }
+  
+  .modal-img-container {
+    position: relative; max-width: 80%; max-height: 80vh;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #modal-img { max-width: 100%; max-height: 80vh; border-radius: 4px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); object-fit: contain; }
+  .modal-close { position: absolute; top: 2rem; right: 3rem; color: #fff; font-size: 4rem; cursor: none; font-family: 'Bebas Neue', sans-serif; line-height: 0.5; transition: transform 0.2s; z-index: 10001; }
+  .modal-close:hover { transform: scale(1.2); }
+  
+  .modal-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    font-size: 4rem; color: #fff; opacity: 0.7; padding: 3rem 2rem;
+    cursor: none; user-select: none; transition: opacity 0.2s, transform 0.2s;
+    z-index: 10005;
+  }
+  .modal-nav:hover { opacity: 1; transform: translateY(-50%) scale(1.1); color: var(--gold); }
+  .modal-prev { left: 1rem; }
+  .modal-next { right: 1rem; }
+
+  /* Info Modal (Rich Text) */
+  #info-modal {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(255,255,255,0.98); z-index: 10010;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  #info-modal.active { opacity: 1; pointer-events: all; }
+  .info-container { max-width: 900px; width: 90%; padding: 4rem; position: relative; max-height: 85vh; overflow-y: auto; }
+  .info-title { font-family: 'Korolev', sans-serif; font-size: 3rem; color: var(--terracotta); margin-bottom: 2rem; border-bottom: 2px solid var(--terracotta); padding-bottom: 1rem; }
+  .info-body { font-family: 'Avenir', sans-serif; font-size: 1.2rem; color: var(--forest); line-height: 1.6; }
+  .info-tabs { display: flex; gap: 2rem; margin-bottom: 2rem; border-bottom: 1px solid rgba(30,58,47,0.1); }
+  .info-tab { padding: 1rem 0; cursor: none; font-weight: bold; opacity: 0.5; transition: opacity 0.2s; }
+  .info-tab.active { opacity: 1; border-bottom: 3px solid var(--terracotta); }
+
+  
+  /* Collage global */
+  #collage-layer {
+    position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none; overflow: hidden; z-index: 5;
+  }
+  .collage-img {
+    position: absolute; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 10px solid #fff;
+    max-width: 700px; max-height: 700px; object-fit: contain; background: #fff;
+    opacity: 0; transform: scale(0.8) rotate(0deg); transition: opacity 0.4s, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .collage-img.pop { opacity: 1; transform: scale(1) rotate(var(--rot)); }
+
+  /* ========== PANEL 8 — CLIENTS ========== */
+  .p-clients {
+    background: var(--page-bg);
+    padding: 0 8vw;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .client-nums { display: flex; gap: 8vw; margin: 3rem 0; width: 100%; justify-content: center; }
+  .client-num-item { text-align: center; }
+  .client-num-item .big-n { font-family: 'Korolev', 'Anton', sans-serif; font-size: clamp(8rem, 15vw, 12rem); color: var(--forest); line-height: 0.8; margin-bottom: 0.5rem; text-shadow: 4px 4px 0px var(--gold); }
+  .client-num-item .lbl { font-size: 1.2rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dark); font-weight: bold; }
+  .client-marquee-wrap { overflow: hidden; width: 100%; margin-top: 4rem; border-top: 2px solid rgba(30,58,47,0.1); border-bottom: 2px solid rgba(30,58,47,0.1); padding: 1rem 0; }
+  .client-marquee {
+    display: flex; gap: 5rem; align-items: center;
+    animation: marquee 3s linear infinite;
+    white-space: nowrap;
+  }
+  .client-name {
+    font-family: 'Korolev', 'Anton', sans-serif;
+    font-size: clamp(3rem, 6vw, 4rem);
+    color: rgba(30,58,47,0.4);
+    letter-spacing: 0.05em;
+    transition: color 0.3s, transform 0.3s;
+    flex-shrink: 0;
+  }
+  .client-name:hover { color: var(--terracotta); transform: scale(1.05); }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* ========== PANEL 9 — 23 CLIENTS LOGOS ========== */
+  .p-all-clients {
+    background: #FFFFFF; /* Pure white requested */
+    color: var(--text-dark);
+    padding: 0 8vw;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    overflow-y: auto; /* Just in case it gets tall */
+  }
+  .p-all-clients .section-label { color: var(--muted); margin-bottom: 1rem; }
+  .clients-grid-container {
+    display: flex; gap: 4vw; margin-top: 2rem; width: 100%; height: 75vh;
+  }
+  .client-logo-column { flex: 1; display: flex; flex-direction: column; gap: 1.5rem; }
+  .client-logo-title { font-family: 'Korolev', 'Anton', sans-serif; font-size: 2.5rem; color: var(--terracotta); border-bottom: 2px solid rgba(196,92,58,0.2); padding-bottom: 0.5rem; }
+  .clients-logo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1.5rem; width: 100%; padding-bottom: 2rem;
+  }
+  .client-logo-box {
+    background: #FAFAFA;
+    border: 1px solid #EAEAEA;
+    padding: 1.5rem;
+    height: 120px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .client-logo-box:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+  .client-logo-box img { max-width: 100%; max-height: 100%; object-fit: contain; mix-blend-mode: multiply; filter: grayscale(100%); transition: filter 0.3s; }
+  .client-logo-box:hover img { filter: grayscale(0%); }
+
+  /* ========== PANEL 10 — TURNOVER ========== */
+  .p-turnover {
+    background: var(--page-bg); /* Changed from gold to a soft bg so numbers pop harder */
+    color: var(--text-dark);
+    flex-direction: column;
+    text-align: center;
+    padding: 0 6vw;
+  }
+  .turnover-wrap {
+    display: flex; align-items: center; justify-content: center; gap: 4vw; margin-top: 3rem;
+  }
+  .t-col .t-year { font-family: 'Korolev', 'Anton', sans-serif; font-size: 2.5rem; letter-spacing: 0.1em; margin-bottom: 1rem; color: var(--terracotta); font-weight: bold; }
+  .t-col .t-amt { font-family: 'Korolev', 'Anton', 'Bebas Neue', sans-serif; font-size: clamp(6rem, 15vw, 15rem); line-height: 0.85; color: var(--forest); font-weight: bold; margin-top:1rem; }
+  .t-cr { font-size: 4rem; margin-left: 0.5rem; color: rgba(30,58,47,0.5); }
+  .t-arrow { font-size: 5rem; color: var(--gold); font-weight: bold; }
+  .t-col.highlight .t-amt { color: var(--terracotta); }
+
+  /* ========== PANEL 11 — TEAM BOLD (LIGHT MODE) ========== */
+  .p-team-bold {
+    background: #FFFFFF; /* Light theme enforced */
+    color: var(--text-dark);
+    padding: 0 8vw;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .p-team-bold .section-label { color: var(--muted); margin-bottom: 2rem; }
+  .team-bold-title {
+    font-family: 'Korolev', 'Anton', sans-serif;
+    font-size: clamp(5rem, 10vw, 12rem);
+    line-height: 0.9;
+    color: var(--forest);
+    margin-bottom: 4rem;
+  }
+  .team-bold-list { display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 1000px; }
+  .tb-item {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    color: var(--text-dark);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(30,58,47,0.15);
+    font-weight: 500;
+  }
+  .tb-item:hover { color: var(--terracotta); border-bottom-color: var(--terracotta); }
+
+  /* ========== PANEL 12 — SYSTEMS ========== */
+  .p-systems {
+    background: var(--cream);
+    flex-direction: column;
+    text-align: center;
+    padding: 0 8vw;
+  }
+  .sys-title { font-family: 'Korolev', 'Anton', sans-serif; font-size: clamp(4rem, 9vw, 10rem); margin: 2rem 0 4rem; color: var(--forest); }
+  .sys-grid { display: flex; justify-content: center; gap: 3vw; flex-wrap: wrap; }
+  .sys-card {
+    background: var(--page-bg);
+    color: var(--text-dark);
+    border: 3px solid var(--terracotta);
+    padding: 4rem 3rem;
+    min-width: 300px;
+    font-size: 2rem;
+    font-weight: bold;
+    border-radius: 12px;
+    font-family: 'Avenir', sans-serif;
+  }
+
+  /* ========== PANEL 13 — CELEBRATIONS ========== */
+  .p-celebrations {
+    background: var(--page-bg);
+    flex-direction: column;
+    text-align: center;
+    padding: 0 10vw;
+  }
+  .celeb-title { font-family: 'Korolev', 'Anton', sans-serif; font-size: clamp(4rem, 12vw, 14rem); color: var(--terracotta); margin-bottom: 2rem; }
+  .celeb-desc { font-size: 2.2rem; line-height: 1.5; color: var(--text-dark); max-width: 900px; font-style: italic; font-family: 'DM Serif Display', serif; }
+
+  /* ========== PANEL 15 — SHORTCOMINGS BOLD (LIGHT MODE) ========== */
+  .p-short-bold {
+    background: var(--page-bg); /* Light background */
+    color: var(--text-dark);
+    padding: 0 8vw;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .p-short-bold .section-label { color: var(--muted); }
+  .short-title-b { font-family: 'Korolev', 'Anton', sans-serif; font-size: clamp(3rem, 7vw, 8rem); color: var(--terracotta); margin: 1.5rem 0 3rem; }
+  .short-grid-b { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; width: 100%; max-width: 1400px; }
+  .short-cell-b {
+    background: #FFFFFF;
+    border: 2px solid rgba(30,58,47,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    padding: 2.5rem;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .short-cell-b:hover { border-color: var(--terracotta); }
+  .short-cell-b::before {
+    content: attr(data-n); position: absolute; bottom: -2rem; right: -1rem;
+    font-family: 'Korolev', 'Anton', sans-serif; font-size: 10rem; color: rgba(196,92,58,0.05); line-height:1;
+  }
+  .short-cell-b h4 { font-family: 'Korolev', 'Anton', sans-serif; font-size: 2.5rem; color: var(--forest); margin-bottom: 0; line-height:1; }
+
+  /* ========== PANEL 16 — ORANGE PAGE ========== */
+  .p-orange {
+    background: var(--terracotta); /* Match brand color */
+    color: var(--white);
+    flex-direction: column;
+    text-align: center;
+    padding: 0 8vw;
+  }
+  .p-orange .quote-mark { color: rgba(255,255,255,0.2); }
+
+  /* ========== PANEL 17 — CLOSING ========== */
+  .p-close {
+    background: var(--gold);
+    flex-direction: column;
+    text-align: center;
+    padding: 0 6vw;
+  }
+  .close-big {
+    font-size: clamp(4rem, 8vw, 10rem);
+    line-height: 0.95;
+    color: var(--text-dark);
+  }
+  .close-big span { color: var(--forest); }
+  .close-sub { font-style: italic; font-size: 1.5rem; color: rgba(26,26,16,0.65); margin-top: 1.5rem; font-family: 'DM Serif Display', serif; }
+  .close-year { font-family: 'Korolev', 'Anton', sans-serif; font-size: 25vw; color: rgba(30,58,47,0.08); position: absolute; pointer-events: none; user-select: none; }
+
+  /* Animated elements */
+  .panel-content { opacity: 1; transform: translateY(0); transition: opacity 0.5s, transform 0.6s; }
+  .panel .panel-content { opacity: 0.15; transform: translateY(10px); }
+  .panel.visible .panel-content { opacity: 1; transform: translateY(0); }
+  .panel.visible .proj-bar-fill { width: var(--target-w); }
+
+  /* Scrollbar hidden */
+  ::-webkit-scrollbar { display: none; }
+
+  /* Section label override for dark panels */
+  .p-clients .section-label, .p-hero .section-label { color: rgba(242,237,228,0.55); }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="progress"></div>
+
+<div id="nav-dots"></div>
+<div id="section-counter">01 / 13</div>
+
+<div id="scroll-hint">
+  <div class="scroll-text">Scroll to explore</div>
+  <div class="scroll-arrow"></div>
+</div>
+
+<div id="track">
+
+  <!-- PANEL 1 — HERO -->
+  <div class="panel p-hero" data-index="0" data-label="Opening" onclick="handleHeroClick(event)" style="cursor: pointer;">
+    <div class="big-num">26</div>
+    <div class="panel-content">
+      <div class="hero-year">Annual Meeting — 2025–26</div>
+      <h1 class="hero-title">Looking Back,<span>Moving Forward</span></h1>
+      <p class="hero-sub">A Year Gone By…</p>
+    </div>
+    <div class="hero-line">Urban Design · Planning · Architecture</div>
+    <div id="announcement-overlay" style="display:none; position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255,255,255,0.95); z-index: 2000; align-items: center; justify-content: center; flex-direction: column;">
+      <img src="10 years.png" alt="10 Years Announcement" style="max-width: 60vw; max-height: 60vh; box-shadow: 0 8px 32px rgba(0,0,0,0.15); border-radius: 2rem; margin-bottom: 2rem;">
+      <canvas id="confetti-canvas" style="position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none;"></canvas>
+    </div>
+  </div>
+
+  <!-- PANEL 2 — AGENDA -->
+  <div class="panel p-agenda" data-index="1" data-label="Agenda">
+    <div class="panel-content" style="width:100%">
+      <div class="section-label">Today's agenda</div>
+      <div class="agenda-items">
+        <div>
+          <div class="agenda-num">01</div>
+          <div class="agenda-card">
+            <h3>Celebrate Breakthroughs</h3>
+            <p>What we built, who we served, the numbers that tell our story, and the moments worth remembering.</p>
+          </div>
+        </div>
+        <div class="divider-v"></div>
+        <div>
+          <div class="agenda-num">02</div>
+          <div class="agenda-card">
+            <h3>Learn from Breakdowns</h3>
+            <p>What didn't work, where we fell short, and how those gaps point us toward what matters most next year.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 3 — BREAKTHROUGH QUESTION -->
+  <div class="panel p-question" data-index="2" data-label="Breakthrough?">
+    <div class="panel-content">
+      <div class="q-label">Reflect</div>
+      <p class="q-text">What was your biggest <em>breakthrough</em> this year?</p>
+    </div>
+  </div>
+
+  <!-- PANEL 4 — YEAR STATEMENT -->
+  <div class="panel p-statement" data-index="3" data-label="The Year">
+    <div class="panel-content">
+      <div class="statement-pre">2025-2026 was a year of ...</div>
+      <h2 class="statement-big">SYNERGY</h2>
+      <p style="font-family:'Avenir', 'Avenir Next', sans-serif; font-style:italic; font-size:clamp(1.5rem, 3.5vw, 3rem); text-transform:uppercase; color:var(--text-dark); margin-top:2rem;">"CREATING EXTRAORDINARY PARTNERSHIPS"</p>
+    </div>
+  </div>
+
+  <!-- PANEL 5 — WHAT WE DELIVERED -->
+  <div class="panel p-delivered" data-index="4" data-label="Delivered">
+    <div class="panel-content" style="width:100%">
+      <div class="section-label">What we delivered</div>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,5rem);color:var(--text-dark);line-height:1;margin-bottom:0.5rem">The numbers.</h2>
+      <div class="deliver-grid">
+        <div class="deliver-item" data-num="01">
+          <h4>Projects</h4>
+          <div class="val" data-count="38">0</div>
+          <p>Total active this year</p>
+        </div>
+        <div class="deliver-item" data-num="02">
+          <h4>Closed</h4>
+          <div class="val" data-count="8">0</div>
+          <p>Projects wrapped in 2025–26</p>
+        </div>
+        <div class="deliver-item" data-num="03">
+          <h4>Cities</h4>
+          <div class="val" data-count="15">0</div>
+          <p>Across India</p>
+        </div>
+        <div class="deliver-item" data-num="04">
+          <h4>Clients</h4>
+          <div class="val" data-count="23">0</div>
+          <p>23 relationships built</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 6 — PROJECTS BREAKDOWN -->
+  <div class="panel p-projects" data-index="5" data-label="Projects">
+    <div class="panel-content" style="width:100%">
+      <div class="proj-header">
+        <div>
+          <div class="proj-sub">Projects overview</div>
+          <div class="proj-title">By Vertical</div>
+        </div>
+        <div class="proj-big val" data-count="38">0</div>
+      </div>
+      <div class="proj-bars">
+        <div class="proj-bar-wrap clickable-box" onclick="openProjectList('Urban Design')">
+          <div class="proj-bar-label">Urban Design</div>
+          <div class="proj-bar-track"><div class="proj-bar-fill" style="--target-w:53%"></div></div>
+          <div class="proj-bar-num val" data-count="20">0</div>
+        </div>
+        <div class="proj-bar-wrap clickable-box" onclick="openProjectList('Planning')">
+          <div class="proj-bar-label">Planning</div>
+          <div class="proj-bar-track"><div class="proj-bar-fill" style="--target-w:39%"></div></div>
+          <div class="proj-bar-num val" data-count="15">0</div>
+        </div>
+        <div class="proj-bar-wrap clickable-box" onclick="openProjectList('Architecture')">
+          <div class="proj-bar-label">Architecture</div>
+          <div class="proj-bar-track"><div class="proj-bar-fill" style="--target-w:8%"></div></div>
+          <div class="proj-bar-num val" data-count="3">0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 7 — FLAGSHIP PROJECTS -->
+  <div class="panel p-project-types" data-index="6" data-label="Flagship Projects">
+    <div class="panel-content" style="width:100%">
+      <div class="section-label">Flagship projects</div>
+      <h2 class="short-title-b" style="margin-top:0;">Flagship projects</h2>
+      <div class="deliver-grid" style="flex-wrap: wrap; width: 100%; gap: 3vw;">
+        <div class="deliver-item clickable-box" data-num="01" onclick="openGallery('01. Urban Design')"><h4 style="color: var(--gold);">Urban Design</h4></div>
+        <div class="deliver-item clickable-box" data-num="02" onclick="openGallery('02. Planning')"><h4 style="color: var(--gold);">Planning</h4></div>
+        <div class="deliver-item clickable-box" data-num="03" onclick="openGallery('03. Architecture')"><h4 style="color: var(--gold);">Architecture</h4></div>
+        <div class="deliver-item clickable-box" data-num="04" onclick="openGallery('04. PMC Services')"><h4 style="color: var(--gold);">PMC Services</h4></div>
+        <div class="deliver-item clickable-box" data-num="05" onclick="openGallery('05. Mobility Exhibition')"><h4 style="color: var(--gold);">Mobility Exhibition</h4></div>
+        <div class="deliver-item clickable-box" data-num="06" onclick="openGallery('06. Internal Research Initiatives')"><h4 style="color: var(--gold);">Internal Research Initiatives</h4></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 8 — CLIENTS & PARTNERSHIPS -->
+  <div class="panel p-clients" data-index="7" data-label="Clients">
+    <div class="panel-content" style="width:100%">
+      <div class="section-label">Our partnerships</div>
+      <div class="client-nums">
+        <div class="client-num-item">
+          <div class="big-n">23</div>
+          <div class="lbl">Total clients</div>
+        </div>
+        <div class="client-num-item">
+          <div class="big-n">14</div>
+          <div class="lbl">New clients this year</div>
+        </div>
+        <div class="client-num-item">
+          <div class="big-n">9</div>
+          <div class="lbl">Retained clients</div>
+        </div>
+      </div>
+      <div class="client-marquee-wrap">
+        <div class="client-marquee">
+          <span class="client-name">ADANI</span>
+          <span class="client-name">MCKINSEY & COMPANY</span>
+          <span class="client-name">DELOITTE</span>
+          <span class="client-name">GIZ</span>
+          <span class="client-name">CRISIL</span>
+          <span class="client-name">WRI</span>
+          <span class="client-name">AMC</span>
+          <span class="client-name">ADANI</span>
+          <span class="client-name">MCKINSEY & COMPANY</span>
+          <span class="client-name">DELOITTE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 9 — 23 CLIENTS -->
+  <div class="panel p-all-clients" data-index="8" data-label="Clients Grid">
+    <div class="panel-content" style="width:100%">
+      <div class="section-label">Our Network</div>
+      <div class="clients-grid-container">
+        
+        <!-- NEW CLIENTS -->
+        <div class="client-logo-column">
+          <div class="client-logo-title">New Clients</div>
+          <div class="clients-logo-grid">
+            <div class="client-logo-box"><img src="Clients/New Client/Adani.jpg" alt="Adani"></div>
+            <div class="client-logo-box"><img src="Clients/New Client/Crisil.png" alt="Crisil"></div>
+            <div class="client-logo-box"><img src="Clients/New Client/DSP.png" alt="DSP"></div>
+            <div class="client-logo-box"><img src="Clients/New Client/Deloitte.png" alt="Deloitte"></div>
+            <div class="client-logo-box"><img src="Clients/New Client/Karan Kothari.png" alt="Karan Kothari"></div>
+            <div class="client-logo-box"><img src="Clients/New Client/MMC.png" alt="MMC"></div>
+            <div class="client-logo-box"><img src="Clients/New Client/McKinsey & Company.png" alt="McKinsey"></div>
+            <div class="client-logo-box"><img src="Clients/New Client/VA Associates.png" alt="VA Associates"></div>
+          </div>
+        </div>
+
+        <!-- RETAINED CLIENTS -->
+        <div class="client-logo-column">
+          <div class="client-logo-title">Retained Clients</div>
+          <div class="clients-logo-grid">
+            <div class="client-logo-box"><img src="Clients/Retained Client/AMC.jpg" alt="AMC"></div>
+            <div class="client-logo-box"><img src="Clients/Retained Client/ATPL.png" alt="ATPL"></div>
+            <div class="client-logo-box"><img src="Clients/Retained Client/Bagmane.png" alt="Bagmane"></div>
+            <div class="client-logo-box"><img src="Clients/Retained Client/GIZ.png" alt="GIZ"></div>
+            <div class="client-logo-box"><img src="Clients/Retained Client/GMC.png" alt="GMC"></div>
+            <div class="client-logo-box"><img src="Clients/Retained Client/ICLEI.png" alt="ICLEI"></div>
+            <div class="client-logo-box"><img src="Clients/Retained Client/INI.jpeg" alt="INI"></div>
+            <div class="client-logo-box"><img src="Clients/Retained Client/MIDFC.png" alt="MIDFC"></div>
+            <div class="client-logo-box"><img src="Clients/Retained Client/MMCPL.png" alt="MMCPL"></div>
+            <div class="client-logo-box"><img src="Clients/Retained Client/WRI.png" alt="WRI"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 10 — TURNOVER -->
+  <div class="panel p-turnover" data-index="9" data-label="Turnover">
+    <div class="panel-content" style="width:100%">
+      <div class="section-label">Financial Growth</div>
+      <div class="turnover-wrap clickable-box" onclick="openModal('https://picsum.photos/1200/800?random=20')">
+        <div class="t-col">
+          <div class="t-year">2024–25</div>
+          <div class="t-amt val val-float" data-count="3.2" data-start="0.0">0.0</div>
+        </div>
+        <div class="t-arrow">➔</div>
+        <div class="t-col highlight">
+          <div class="t-year">2025–26</div>
+          <div class="t-amt val val-float" data-count="5.2" data-start="0.0">0.0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 11 — TEAM BOLD -->
+  <div class="panel p-team-bold" data-index="10" data-label="Team">
+    <div class="panel-content" style="width:100%">
+      <div class="section-label">The people behind the work</div>
+      <h2 class="team-bold-title">Team & Growth</h2>
+      <div class="deliver-grid" style="flex-wrap: wrap; width: 100%; gap: 3vw;">
+        <div class="deliver-item clickable-box" data-num="01" onclick="openTeamGallery('Team Expansion')">
+          <h4>Team Expansion</h4>
+          <div class="val" style="color: var(--gold); margin-top: 0.5rem;">New hires</div>
+          <p style="margin-top: 0.3rem; font-size: 1rem;">Onboarded</p>
+        </div>
+        <div class="deliver-item clickable-box" data-num="02" onclick="openTeamGallery('Core Team')">
+          <h4>Core Team</h4>
+          <div class="val" style="color: var(--gold); margin-top: 0.5rem;">Strengthening</div>
+          <p style="margin-top: 0.3rem; font-size: 1rem;">Development</p>
+        </div>
+        <div class="deliver-item clickable-box" data-num="03" onclick="openTeamGallery('Workshops', false, true)">
+          <h4>Workshops</h4>
+          <div class="val" style="color: var(--gold); margin-top: 0.5rem;">Learning</div>
+          <p style="margin-top: 0.3rem; font-size: 1rem;">Sessions</p>
+        </div>
+        <div class="deliver-item clickable-box" data-num="04" onclick="openTeamGallery('Partnerships', true)">
+          <h4>Partnerships</h4>
+          <div class="val" style="color: var(--gold); margin-top: 0.5rem;">Working</div>
+          <p style="margin-top: 0.3rem; font-size: 1rem;">Together in office</p>
+        </div>
+        <div class="deliver-item clickable-box" data-num="05" onclick="openTeamGallery('Grateful', true)">
+          <h4>Grateful</h4>
+          <div class="val" style="color: var(--gold); margin-top: 0.5rem;">Contributors</div>
+          <p style="margin-top: 0.3rem; font-size: 1rem;">Who moved on</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 12 — SYSTEMS -->
+  <div class="panel p-systems" data-index="11" data-label="Systems">
+    <div class="panel-content" style="width:100%">
+      <div class="section-label" style="color:var(--muted)">Infrastructure</div>
+      <h2 class="sys-title">Systems in Place</h2>
+      <div class="sys-grid">
+        <div class="sys-card clickable-box" onclick="openSystemsGallery('Dashboard')">Dashboard</div>
+        <div class="sys-card clickable-box" onclick="openSystemsGallery('Clockify')">Clockify</div>
+        <div class="sys-card clickable-box" onclick="openSystemsGallery('Standard Operating Procedures')">Standard Operating Procedures</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 13 — CELEBRATIONS -->
+  <div class="panel p-celebrations" data-index="12" data-label="Celebrations" onclick="openCollage(event)" style="cursor: pointer;">
+    <div class="panel-content" style="width:100%; pointer-events:none;">
+      <div class="section-label">Moments (Click Anywhere)</div>
+      <h2 class="celeb-title">Celebrations</h2>
+      <p class="celeb-desc" style="margin: 0 auto;">Trips, team moments, and the camaraderie that makes the work worth doing. The team came together for the Mobility Exhibition — a one-of-a-kind partnership moment.</p>
+    </div>
+  </div>
+
+  <!-- PANEL 14 — BREAKDOWN QUESTION -->
+  <div class="panel p-question" data-index="13" data-label="Breakdown?">
+    <div class="panel-content">
+      <div class="q-label">Reflect</div>
+      <p class="q-text">What was your biggest <em>breakdown</em> this year?</p>
+    </div>
+  </div>
+
+  <!-- PANEL 15 — SHORTCOMINGS BOLD -->
+  <div class="panel p-short-bold" data-index="14" data-label="Shortcomings">
+    <div class="panel-content" style="width:100%">
+      <div class="section-label">Where we fell short</div>
+      <h2 class="short-title-b">Where We Fell Short</h2>
+      <div class="short-grid-b">
+        <div class="short-cell-b clickable-box" data-n="01" onclick="openShortcoming(1)">
+          <h4>Projects vs Goals</h4>
+        </div>
+        <div class="short-cell-b clickable-box" data-n="02" onclick="openShortcoming(2)">
+          <h4>Business Performance</h4>
+        </div>
+        <div class="short-cell-b clickable-box" data-n="03" onclick="openShortcoming(3)">
+          <h4>Team & Capacity</h4>
+        </div>
+        <div class="short-cell-b clickable-box" data-n="04" onclick="openShortcoming(4)">
+          <h4>Systems & Infrastructure</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 16 — ORANGE PAGE -->
+  <div class="panel p-orange" data-index="15" data-label="Perspective">
+    <div class="panel-content">
+      <div class="quote-mark" style="font-family:'DM Serif Display',serif; font-size:8rem; line-height:0.5; margin-bottom:2rem;">"</div>
+      <p class="quote-text" style="font-family:'DM Serif Display',serif; font-size:clamp(1.5rem, 3.5vw, 3.5rem); line-height:1.3; max-width:800px; color:var(--white);">If breakthroughs show our potential, breakdowns show our direction.</p>
+      <div class="quote-attr" style="font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; margin-top:2rem; opacity:0.7; color:rgba(255,255,255,0.9);">Annual Meeting 2025–26</div>
+    </div>
+  </div>
+
+  <!-- PANEL 17 — CLOSE -->
+  <div class="panel p-close" data-index="16" data-label="End">
+    <div class="close-year">26</div>
+    <div class="panel-content" style="position:relative; z-index:2;">
+      <div style="font-size:1.5rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--terracotta); margin-bottom:2rem;">Gratitude.</div>
+      <h2 class="close-big" style="font-size: 3rem;">Thank you</h2>
+      <p class="close-sub">For another year of partnerships.</p>
+      <p style="font-size: 1.3rem; font-weight: bold; color: var(--text-dark); margin-top: 2rem; line-height: 1.6; max-width: 80%;">We're cleaning the slate, rolling out a fresh canvas and this year, we don't just start over, we create something entirely new.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL HTML -->
+<div id="img-modal" onclick="closeModal(event)">
+  <div class="modal-close" onclick="closeModal(event)">&times;</div>
+  <div class="modal-nav modal-prev" onclick="prevModalImg(event)">&#10094;</div>
+  <div class="modal-img-container">
+    <img id="modal-img" src="" alt="Popup Image">
+  </div>
+  <div class="modal-nav modal-next" onclick="nextModalImg(event)">&#10095;</div>
+</div>
+
+<!-- INFO MODAL -->
+<div id="info-modal" onclick="closeInfoModal(event)">
+  <div class="modal-close" onclick="closeInfoModal(event)">&times;</div>
+  <div class="info-container">
+    <div id="info-title" class="info-title"></div>
+    <div id="info-body" class="info-body"></div>
+  </div>
+</div>
+
+<!-- COLLAGE LAYER -->
+<div id="collage-layer"></div>
+
+<script>
+  const track = document.getElementById('track');
+  const panels = document.querySelectorAll('.panel');
+  const progress = document.getElementById('progress');
+  const counter = document.getElementById('section-counter');
+  const scrollHint = document.getElementById('scroll-hint');
+  const navDots = document.getElementById('nav-dots');
+  const cursor = document.getElementById('cursor');
+
+  let current = 0;
+  let isAnimating = false;
+  const total = panels.length;
+
+  // Build nav dots
+  panels.forEach((p, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.title = p.dataset.label;
+    dot.onclick = () => goTo(i);
+    navDots.appendChild(dot);
+  });
+
+  // Announcement + confetti for hero page
+  let confettiActive = false;
+  function handleHeroClick(event) {
+    if (current !== 0) return;
+    event.stopPropagation();
+    const overlay = document.getElementById('announcement-overlay');
+    if (overlay.style.display === 'flex') return;
+    overlay.style.display = 'flex';
+    startConfetti();
+    confettiActive = true;
+  }
+
+  // Hide announcement/confetti when leaving hero page
+  const origGoTo = goTo;
+  goTo = function(idx) {
+    if (confettiActive && idx !== 0) {
+      document.getElementById('announcement-overlay').style.display = 'none';
+      stopConfetti();
+      confettiActive = false;
+    }
+    origGoTo(idx);
+  }
+
+  // Simple confetti animation
+  let confettiTimer;
+  function startConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx = canvas.getContext('2d');
+    const confetti = Array.from({length: 120}, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * -canvas.height,
+      r: 6 + Math.random() * 8,
+      d: 2 + Math.random() * 4,
+      color: `hsl(${Math.random()*360},90%,60%)`,
+      tilt: Math.random() * 10,
+      tiltAngle: Math.random() * Math.PI
+    }));
+    function draw() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      confetti.forEach(c => {
+        ctx.beginPath();
+        ctx.ellipse(c.x, c.y, c.r, c.r/2, c.tiltAngle, 0, 2*Math.PI);
+        ctx.fillStyle = c.color;
+        ctx.fill();
+      });
+    }
+    function update() {
+      confetti.forEach(c => {
+        c.y += c.d;
+        c.x += Math.sin(c.tiltAngle) * 2;
+        c.tiltAngle += 0.05;
+        if (c.y > canvas.height) {
+          c.y = -10;
+          c.x = Math.random() * canvas.width;
+        }
+      });
+    }
+    function loop() {
+      update();
+      draw();
+      confettiTimer = requestAnimationFrame(loop);
+    }
+    loop();
+  }
+  function stopConfetti() {
+    cancelAnimationFrame(confettiTimer);
+    const canvas = document.getElementById('confetti-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+    }
+  }
+
+  function goTo(idx) {
+    if (isAnimating || idx < 0 || idx >= total) return;
+    isAnimating = true;
+    current = idx;
+
+    // Clear collage if we leave page 13
+    if (current !== 12) {
+      document.getElementById('collage-layer').innerHTML = '';
+      collageClickCount = 0;
+    }
+
+    track.style.transform = `translateX(-${current * 100}vw)`;
+
+    // Update dots
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+
+    // Counter
+    counter.textContent = String(current + 1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+
+    // Progress
+    progress.style.width = ((current / (total - 1)) * 100) + '%';
+
+    // Scroll hint
+    if (current > 0) scrollHint.classList.add('hidden');
+
+    // Mark visible
+    panels.forEach((p, i) => p.classList.toggle('visible', i === current));
+
+    // Animate counts on delivered panel, projects vertical, & turnover
+    if (current === 4 || current === 5 || current === 9) animateCounts();
+
+    setTimeout(() => { isAnimating = false; }, 500);
+  }
+
+  function animateCounts() {
+    document.querySelectorAll('.panel.visible .val[data-count]').forEach(el => {
+      const isFloat = el.classList.contains('val-float');
+      const target = isFloat ? parseFloat(el.dataset.count) : parseInt(el.dataset.count);
+      let n = isFloat ? 0.0 : 0;
+      const step = isFloat ? (target / 30) : Math.ceil(target / 30);
+      const timer = setInterval(() => {
+        n = isFloat ? Math.min(n + step, target) : Math.min(n + step, target);
+        el.textContent = isFloat ? n.toFixed(1) : n;
+        if (n >= target) clearInterval(timer);
+      }, 40);
+    });
+  }
+
+  // Wheel scroll
+  let wheelTimeout;
+  window.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    clearTimeout(wheelTimeout);
+    wheelTimeout = setTimeout(() => {
+      if (e.deltaY > 0 || e.deltaX > 0) goTo(current + 1);
+      else goTo(current - 1);
+    }, 300);
+  }, { passive: false });
+
+  // Touch
+  let touchStartX = 0, touchStartY = 0;
+  window.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  });
+  window.addEventListener('touchend', e => {
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      goTo(dx > 0 ? current + 1 : current - 1);
+    }
+  });
+
+  // Keyboard
+  window.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(current + 1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goTo(current - 1);
+  });
+
+  // Cursor
+  window.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .dot, .type-row, .client-name, .clickable-row, .clickable-box, .p-celebrations').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+  });
+
+  // Modal Logic
+  const imgModal = document.getElementById('img-modal');
+  const modalImg = document.getElementById('modal-img');
+  const infoModal = document.getElementById('info-modal');
+  const infoTitle = document.getElementById('info-title');
+  const infoBody = document.getElementById('info-body');
+  
+  let modalImgList = [];
+  let currentModalIdx = 0;
+
+  function openModal(srcInput, isWhiteBg = false) {
+    if (window.event) window.event.stopPropagation();
+    
+    // Support single string or array of strings
+    modalImgList = Array.isArray(srcInput) ? srcInput : [srcInput];
+    currentModalIdx = 0;
+    
+    // White BG toggle
+    imgModal.classList.toggle('white-bg', isWhiteBg);
+    
+    // Show/hide navigation arrows
+    const hasNav = modalImgList.length > 1;
+    document.querySelector('.modal-prev').style.display = hasNav ? 'block' : 'none';
+    document.querySelector('.modal-next').style.display = hasNav ? 'block' : 'none';
+    
+    modalImg.src = modalImgList[currentModalIdx];
+    
+    // Rotate MG baug image 90deg anticlockwise ONLY on page 7
+    if ((modalImg.src.includes('MG%20baug') || modalImg.src.includes('MG baug')) && current === 6) {
+      modalImg.style.transform = 'rotate(-90deg) scale(0.8)';
+    } else {
+      modalImg.style.transform = 'none';
+    }
+    
+    imgModal.classList.add('active');
+  }
+
+  function prevModalImg(e) {
+    e.stopPropagation();
+    if (modalImgList.length <= 1) return;
+    currentModalIdx = (currentModalIdx - 1 + modalImgList.length) % modalImgList.length;
+    modalImg.src = modalImgList[currentModalIdx];
+    if ((modalImg.src.includes('MG%20baug') || modalImg.src.includes('MG baug')) && current === 6) {
+      modalImg.style.transform = 'rotate(-90deg) scale(0.8)';
+    } else {
+      modalImg.style.transform = 'none';
+    }
+  }
+
+  function nextModalImg(e) {
+    e.stopPropagation();
+    if (modalImgList.length <= 1) return;
+    currentModalIdx = (currentModalIdx + 1) % modalImgList.length;
+    modalImg.src = modalImgList[currentModalIdx];
+    if ((modalImg.src.includes('MG%20baug') || modalImg.src.includes('MG baug')) && current === 6) {
+      modalImg.style.transform = 'rotate(-90deg) scale(0.8)';
+    } else {
+      modalImg.style.transform = 'none';
+    }
+  }
+
+  function closeModal(e) {
+    if (e && e.target && (e.target.id === 'img-modal' || e.target.classList.contains('modal-close'))) {
+      imgModal.classList.remove('active');
+      setTimeout(() => { modalImg.src = ''; modalImgList = []; }, 300);
+    }
+  }
+
+  // Info Modal Logic
+  function openInfoModal(title, bodyHtml) {
+    infoTitle.textContent = title;
+    infoBody.innerHTML = bodyHtml;
+    infoModal.classList.add('active');
+  }
+
+  function closeInfoModal(e) {
+    if (e && e.target && (e.target.id === 'info-modal' || e.target.classList.contains('modal-close'))) {
+      infoModal.classList.remove('active');
+    }
+  }
+
+  // Data for Project Lists (Panel 6)
+  const projectData = {
+    'Urban Design': ["WRI_Mobility Exhibition_Ahmedabad", "ATPL_Street Design Retainer 2025_Ahmedabad", "GMC_Meena Bazaar_Gandhinagar", "GMC_Raysan Approach Road_Gandhinagar", "MMC_MG Baug_Mahesana", "MMC_PMC MG Baug_Mahesana", "MMC_PMC Modhera Road_Mahesana", "MMC_PMC Sai Talav_Mahesana", "MMC_Sai Talav_Mahesana", "PRSTRC_Technical Advisory For Streets in Punjab", "ATPL_Street Design Retainer 2024_Ahmedabad", "GMC_Koba Pancheshwar_Gandhinagar", "GMC_Panchamba Talav_Gandhinagar", "GMC_PMC Knowledge Corridor_Gandhinagar", "MMC_Modhera road_Mahesana", "MMCPL_Basan Bridge_Gandhinagar", "CMDA_Perumbakam Lake_Chennai", "CMDA_Velachary Lake_Chennai", "GMC_Knowledge Corridor_Gandhinagar", "MMCPL_Lake Design_Ahmedabad"],
+    'Planning': ["AMC_Rapid Parking_Ahmedabad", "AMRC_TIA for Health City_Ahmedabad", "Bagmane_TIA Retainer 2025_Bengaluru", "CRISIL_Proof of Parking_Mumbai", "Deloitte_Olympics Master Plan Traffic Study_Ahmedabad", "DSP_TIA for Orion Redevelopment at ITPH_Hyderabad", "ICLEI_PT Plan_Leh", "INI_Amba Township Master Plan Mobility_Ahmedabad", "INI_Cityside Development TIA_Guwahati", "Mckinsey_PRT review_Dehradun", "VA Group_Traffic Study Neev School_Bengaluru", "Vastushilp_Master Plan Mobility_Somnath", "AMC_Parking Plan NWZ_Ahmedabad", "CRISIL_ToD_Nagpur", "GIZ_Street Vending Guidelines_India"],
+    'Architecture': ["Karan Kothari_Site Development_Nagpur", "MIDFC_Bus stop and transfer station_Meghalaya", "Abhijit Deshmukh_Farm House_Pusad"]
+  };
+
+  function openProjectList(type) {
+    const list = projectData[type] || [];
+    const html = `<ul style="list-style:none; padding:0; column-count: 2; column-gap: 2rem;">` + 
+                 list.map(p => `<li style="margin-bottom:0.8rem; font-size:1.1rem; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:0.4rem;">${p}</li>`).join('') + 
+                 `</ul>`;
+    openInfoModal(type + ' Projects', html);
+  }
+
+  // Flagship Image Mapping
+  const flagshipImages = {
+    '01. Urban Design': ["00. Flagship projects/01. Urban Design/AMC Makarba lake.jpg.jpeg", "00. Flagship projects/01. Urban Design/ATPL.jpeg", "00. Flagship projects/01. Urban Design/KC.jpeg", "00. Flagship projects/01. Urban Design/Koba Pancheshwarr details.jpeg", "00. Flagship projects/01. Urban Design/Linear park.png", "00. Flagship projects/01. Urban Design/MG baug.jfif", "00. Flagship projects/01. Urban Design/Modhera.jfif", "00. Flagship projects/01. Urban Design/Sai Talav.jpeg", "00. Flagship projects/01. Urban Design/Vavol.jpeg"],
+    '02. Planning': ["00. Flagship projects/02. Planning/1.jpg", "00. Flagship projects/02. Planning/2.jpg", "00. Flagship projects/02. Planning/240814_AMC PROJECT.jpg", "00. Flagship projects/02. Planning/3.jpg", "00. Flagship projects/02. Planning/CoverPage_Leh PT Proposal_Report copy.jpg", "00. Flagship projects/02. Planning/CoverPage_SOP for E bus depot operations_final guidebook.jpg", "00. Flagship projects/02. Planning/Parking sharing in Bodakdev.jpg", "00. Flagship projects/02. Planning/SIDCO E-bus service routes in Leh.jpg", "00. Flagship projects/02. Planning/Screenshot (63).png", "00. Flagship projects/02. Planning/WhatsApp Image 2026-03-25 at 5.31.10 PM.jpeg", "00. Flagship projects/02. Planning/food hub.png", "00. Flagship projects/02. Planning/vending.png"],
+    '03. Architecture': ["00. Flagship projects/03. Architecture/Bus stop and transfer station_Meghalaya.jfif", "00. Flagship projects/03. Architecture/LR.png", "00. Flagship projects/03. Architecture/KKBP_Img_8.png"],
+    '04. PMC Services': ["00. Flagship projects/04. PMC Services/KC.jfif", "00. Flagship projects/04. PMC Services/MG Baug.jpeg", "00. Flagship projects/04. PMC Services/Modhera.jpeg", "00. Flagship projects/04. PMC Services/Sai talav.jpeg", "00. Flagship projects/04. PMC Services/WhatsApp Image 2026-03-25 at 8.12.29 PM.jpeg"],
+    '05. Mobility Exhibition': ["00. Flagship projects/05. Mobility Exhibition/1.jfif", "00. Flagship projects/05. Mobility Exhibition/2.jfif", "00. Flagship projects/05. Mobility Exhibition/3.jfif", "00. Flagship projects/05. Mobility Exhibition/4.jfif", "00. Flagship projects/05. Mobility Exhibition/5.jfif", "00. Flagship projects/05. Mobility Exhibition/6.jpg"],
+    '06. Internal Research Initiatives': ["00. Flagship projects/06. Internal Research Initiatives/Complete Streets.png", "00. Flagship projects/06. Internal Research Initiatives/Parking Dashboard.png", "00. Flagship projects/06. Internal Research Initiatives/Public Transport.png"]
+  };
+
+  function openGallery(cat) {
+    const imgs = flagshipImages[cat] || [];
+    openModal(imgs, true); // White BG
+  }
+
+  // Page 15 Content
+  function openShortcoming(n) {
+    if (n === 1) {
+      const html = `
+        <div class="info-tabs">
+          <div class="info-tab active" onclick="updateShortcomingTab(this, 'ud')">Urban Design</div>
+          <div class="info-tab" onclick="updateShortcomingTab(this, 'planning')">Planning</div>
+          <div class="info-tab" onclick="updateShortcomingTab(this, 'arch')">Architecture</div>
+        </div>
+        <div id="tab-body" class="info-body">
+          <p><strong>Expanding to 9+ cities:</strong> Udaipur, Banaras, Indore, and Bangalore.</p>
+          <p><strong>Project targets:</strong> 50 km streets, 15 lakefronts, 5 vending zones, 2 gardens.</p>
+          <p><strong>Key focus areas:</strong> Crowd management, wayfinding, placemaking, inclusive and heat-resilient design.</p>
+          <p><strong>Team & Tools:</strong> 8 core members + interns. Using drones, rendering software, and site mobility support.</p>
+        </div>
+      `;
+      openInfoModal('Projects & Goals', html);
+    } else if (n === 2) {
+      openInfoModal('Business Performance', `<p style="font-size:2rem; font-weight:bold; color:var(--terracotta);">Goal: 8 cr <br> Actual: 5.2 cr</p>`);
+    } else if (n === 3) {
+      openInfoModal('Team & Capacity', `<p><strong>Expected Team:</strong> ~40 people</p><p><strong>Actual Team:</strong> 33 people</p>`);
+    } else if (n === 4) {
+      openInfoModal('Systems & Infrastructure', `<ul><li>Targeted a unified office space for better synergy.</li><li>Requirement for dedicated servers and improved software management.</li></ul>`);
+    }
+  }
+
+  function updateShortcomingTab(el, type) {
+    document.querySelectorAll('.info-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    const tb = document.getElementById('tab-body');
+    if (type === 'ud') {
+      tb.innerHTML = `<p><strong>Expanding to 9+ cities:</strong> Udaipur, Banaras, Indore, and Bangalore.</p><p><strong>Project targets:</strong> 50 km streets, 15 lakefronts, 5 vending zones, 2 gardens.</p><p><strong>Key focus areas:</strong> Crowd management, wayfinding, placemaking, inclusive and heat-resilient design.</p>`;
+    } else if (type === 'planning') {
+      tb.innerHTML = `<p><strong>Expanding scope across regions:</strong> City-scale plans, regional frameworks, and zoning strategies.</p><p><strong>Project targets:</strong> 2 City Mobility/Logistic Plan, 5 TIA, 5 LAP.</p><p><strong>Key focus areas:</strong> Transit-oriented development, public participation, Climate reliant planning.</p>`;
+    } else if (type === 'arch') {
+      tb.innerHTML = `<p><strong>Expanding scope:</strong> New architectural, interior, and competition-driven projects.</p><p><strong>Project targets:</strong> 3 architectural projects, 3 interior projects, and 2 national design competitions.</p><p><strong>Key focus areas:</strong> Context-sensitive architecture, user-centric interiors, design detailing, and adaptive reuse.</p>`;
+    }
+  }
+
+  // Systems Images Mapping
+  const systemsImages = {
+    'Dashboard': ["Systems in place/Dashboard/Screenshot 2026-03-26 160635.png"],
+    'Clockify': ["Systems in place/Clockify/Screenshot 2026-03-26 160734.png"],
+    'Standard Operating Procedures': ["Systems in place/Standard Operating Procedures/policy.png"]
+  };
+
+  function openSystemsGallery(cat) {
+    const imgs = systemsImages[cat] || [];
+    if (imgs.length === 0) return;
+    
+    modalImgList = imgs;
+    currentModalIdx = 0;
+    imgModal.classList.toggle('white-bg', true);
+    document.querySelector('.modal-prev').style.display = 'none';
+    document.querySelector('.modal-next').style.display = 'none';
+    modalImg.src = modalImgList[currentModalIdx];
+    modalImg.style.transform = 'none';
+    imgModal.classList.add('active');
+  }
+
+  // Team and Growth Images Mapping
+  const teamGalleryImages = {
+    'Team Expansion': ["Team and Growth/team/927f6354-e253-41ab-ab73-e7412e1c8fc7.jfif"],
+    'Core Team': ["Team and Growth/core team/852ec148-22e1-4781-bce3-78c64c4575f6.jfif"],
+    'Workshops': ["Team and Growth/Workshops/11.jpg", "Team and Growth/Workshops/6085c8f5-62a3-4299-98a2-a99d126b08d2.jfif"],
+    'Partnerships': ["Team and Growth/partnerships and working in the office/10401d65-1a58-4ccb-99f7-e67c4ceffe99.jfif", "Team and Growth/partnerships and working in the office/839679c2-4285-4921-8681-bd7aa5342bc6.jfif", "Team and Growth/partnerships and working in the office/97908308-15b1-47e8-b28c-16bd23ec1887.jfif", "Team and Growth/partnerships and working in the office/aeec5d37-a704-48a0-8a36-320ad4bfcca5.jfif", "Team and Growth/partnerships and working in the office/c4846bfe-a17b-4e9e-80e5-42a73b2b68f8.jfif", "Team and Growth/partnerships and working in the office/d50f54a3-7882-44cd-afeb-53d141a2ddb6.jfif", "Team and Growth/partnerships and working in the office/d543f042-73fd-4c7b-8009-06f75dc6fbf9.jfif"],
+    'Grateful': ["Team and Growth/People who have left/0c886d02-a304-448b-9307-10495dd1d6a8.jfif", "Team and Growth/People who have left/0d5cbc8e-e27d-4cd2-ac04-c0ae7adce071.jfif", "Team and Growth/People who have left/143457b3-7246-469a-b6a5-9b6d25aa7707.jfif", "Team and Growth/People who have left/def12e9b-23d0-465d-ae71-84ce2777ad50.jfif", "Team and Growth/People who have left/e639eea1-b92b-4615-aade-a4853dd6445e.jfif"]
+  };
+
+  let teamSlideTimeout;
+
+  function openTeamGallery(cat, isFast = false, isManual = false) {
+    const imgs = teamGalleryImages[cat] || [];
+    if (imgs.length === 0) return;
+    
+    modalImgList = imgs;
+    currentModalIdx = 0;
+    imgModal.classList.toggle('white-bg', true);
+    
+    // Show/hide navigation arrows based on manual mode
+    if (isManual && imgs.length > 1) {
+      document.querySelector('.modal-prev').style.display = 'block';
+      document.querySelector('.modal-next').style.display = 'block';
+    } else {
+      document.querySelector('.modal-prev').style.display = 'none';
+      document.querySelector('.modal-next').style.display = 'none';
+    }
+    
+    modalImg.src = modalImgList[currentModalIdx];
+    modalImg.style.transform = 'none';
+    imgModal.classList.add('active');
+    
+    // Only enable auto-slideshow if NOT manual mode
+    if (!isManual) {
+      // Fast slideshow for Partnerships and Grateful (1 second), normal 2 seconds for others
+      const slideSpeed = isFast ? 1000 : 2000;
+      
+      // Auto-advance slideshow
+      function nextSlide() {
+        currentModalIdx = (currentModalIdx + 1) % modalImgList.length;
+        modalImg.src = modalImgList[currentModalIdx];
+        teamSlideTimeout = setTimeout(nextSlide, slideSpeed);
+      }
+      
+      teamSlideTimeout = setTimeout(nextSlide, slideSpeed);
+    }
+  }
+
+  // Override closeModal to clear slideshow timer
+  const originalCloseModal = closeModal;
+  closeModal = function(e) {
+    clearTimeout(teamSlideTimeout);
+    originalCloseModal(e);
+  };
+
+  // Celebrations Collage
+  const celebrationImages = ["Celebrations/03855968-0f5d-48bf-8de0-3216bafbf2f2.jfif", "Celebrations/34ed970a-a036-417e-abe3-7f06a2c8995c.jfif", "Celebrations/927f6354-e253-41ab-ab73-e7412e1c8fc7.jfif", "Celebrations/92e8c4b4-d0c8-4815-8c30-98f567609331.jfif", "Celebrations/9741ba83-c463-4bc8-aa92-80b5f81be2f3.jfif", "Celebrations/a1e5d6ee-cc5a-4351-975b-62506e8f1d2c.jfif", "Celebrations/c771e8d4-bd7b-4219-b14d-920d8346dd42 (1).jfif", "Celebrations/c771e8d4-bd7b-4219-b14d-920d8346dd42.jfif", "Celebrations/f24a47fb-9408-4812-a1f0-889a1ad29e2c.jfif", "Celebrations/f30a418d-90b7-4ba5-953d-346eb9b5daca.jfif"];
+  let collageClickCount = 0;
+
+  function openCollage(e) {
+    if (!e || imgModal.classList.contains('active')) return;
+    const container = document.getElementById('collage-layer');
+    const x = e.clientX;
+    const y = e.clientY;
+
+    const img = document.createElement('img');
+    const src = celebrationImages[collageClickCount % celebrationImages.length];
+    img.src = src;
+    img.className = 'collage-img';
+    img.style.left = (x - 150) + 'px';
+    img.style.top = (y - 120) + 'px';
+    
+    // Position randomly but around cursor
+    const offset_x = (Math.random() - 0.5) * 150;
+    const offset_y = (Math.random() - 0.5) * 150;
+    img.style.left = (e.clientX + offset_x - 250) + 'px';
+    img.style.top = (e.clientY + offset_y - 250) + 'px';
+    
+    const rot = (Math.random() - 0.5) * 30;
+    img.style.setProperty('--rot', rot + 'deg');
+    
+    container.appendChild(img);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        img.classList.add('pop');
+      });
+    });
+
+    collageClickCount++;
+  }
+
+  // Init
+  goTo(0);
+</script>
+</body>
+</html>
